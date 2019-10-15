@@ -41,7 +41,8 @@ public class JaversDemoApplication {
 		hamidouNew.getAddressList().add(new Address(2, "222 Guess Drive", "Great City", "Rocky State", 35689));
 
 		Javers javers = JaversBuilder.javers().build();
-		Diff objectDiffs = javers.compare(hamidouOld, hamidouNew);
+		Diff objectDiffs = javers.compare(null, hamidouNew);
+		objectDiffs.getChanges().get(0).
 
 		System.out.println(objectDiffs);
 	}
