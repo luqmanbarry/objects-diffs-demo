@@ -1,10 +1,12 @@
 package com.hamidou;
 
+import org.javers.common.string.PrettyValuePrinter;
 import org.javers.core.Javers;
 import org.javers.core.JaversBuilder;
 import org.javers.core.diff.Diff;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -38,13 +40,23 @@ public class JaversDemoApplication {
 		hamidouNew.setSalary(BigDecimal.valueOf(50000));
 		hamidouNew.setBirthDate(new Date());
 		hamidouNew.getAddressList().add(new Address(1, "111 job avenue", "Awesome City", "Vibrant State", 12345));
-		hamidouNew.getAddressList().add(new Address(2, "222 Guess Drive", "Great City", "Rocky State", 35689));
+		//hamidouNew.getAddressList().add(new Address(2, "222 Guess Drive", "Great City", "Rocky State", 35689));
 
 		Javers javers = JaversBuilder.javers().build();
-		Diff objectDiffs = javers.compare(null, hamidouNew);
-		objectDiffs.getChanges().get(0).
+		Diff objectDiffs = javers.compare(hamidouOld, hamidouNew);
+		objectDiffs.getChanges().get(0);
 
 		System.out.println(objectDiffs);
+		System.out.println("--------------------- CHANGES ---------------------");
+		objectDiffs.getChanges().forEach(change -> System.out.println(change));
+		System.out.println("--------------------- GLOBAL ID ---------------------");
+		objectDiffs.getChanges().forEach(change -> System.out.println(change.getAffectedGlobalId()));
+		System.out.println("---------------------CHANGES & GLOBAL ID ---------------------");
+		objectDiffs.getChanges().forEach(change -> {
+			String outPut = change.getAffectedGlobalId() + " & " + change.prettyPrint(PrettyValuePrinter.getDefault());
+			outPut = StringUtils.replace(outPut, "\n", " ");
+			System.out.println(outPut);
+		});
 	}
 
 }
